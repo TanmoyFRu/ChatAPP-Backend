@@ -1,20 +1,20 @@
-# 🚀 FastAPI Chat API with AI Integration
+#  FastAPI Chat API with AI Integration
 
 A modern, scalable chat API built with FastAPI that integrates Google Gemini AI to provide intelligent responses to user messages. The system features real-time messaging, JWT authentication, room-based conversations, and asynchronous AI processing.
 
-## ✨ Features
+##  Features
 
-- **🔐 JWT Authentication** - Secure user registration and login
-- **🏠 Room Management** - Create and manage chat rooms
-- **💬 Real-time Messaging** - Send messages and get instant AI responses
-- **🤖 AI Integration** - Google Gemini AI provides immediate intelligent responses
-- **⚡ Async Processing** - Celery task queue for non-blocking AI responses
-- **📚 Auto Documentation** - Interactive API docs with Swagger UI
-- **🔍 Type Safety** - Pydantic models with full validation
-- **🌐 CORS Support** - Ready for frontend integration
-- **📊 Message History** - Paginated message retrieval with conversation context
+- ** JWT Authentication** - Secure user registration and login
+- ** Room Management** - Create and manage chat rooms
+- ** Real-time Messaging** - Send messages and get instant AI responses
+- ** AI Integration** - Google Gemini AI provides immediate intelligent responses
+- ** Async Processing** - Celery task queue for non-blocking AI responses
+- ** Auto Documentation** - Interactive API docs with Swagger UI
+- ** Type Safety** - Pydantic models with full validation
+- ** CORS Support** - Ready for frontend integration
+- ** Message History** - Paginated message retrieval with conversation context
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Component | Technology |
 |-----------|------------|
@@ -26,7 +26,7 @@ A modern, scalable chat API built with FastAPI that integrates Google Gemini AI 
 | **Documentation** | Automatic OpenAPI/Swagger |
 | **Validation** | Pydantic v2 |
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 chat_api/
@@ -55,7 +55,7 @@ chat_api/
 └── README.md                 # This file
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -136,7 +136,7 @@ celery -A app.services.tasks.celery_app worker --loglevel=info
 - **ReDoc Documentation**: http://localhost:8000/redoc
 - **Health Check**: http://localhost:8000/health
 
-## 📖 API Documentation
+##  API Documentation
 
 ### Authentication Endpoints
 
@@ -160,7 +160,7 @@ celery -A app.services.tasks.celery_app worker --loglevel=info
 |--------|----------|-------------|
 | POST | `/chat/{room_id}` | Send message (gets instant AI response) |
 
-## 🔄 How AI Integration Works
+##  How AI Integration Works
 
 1. **User sends message** → Message saved to database immediately
 2. **AI processes request** → Gemini analyzes message + conversation history  
@@ -175,7 +175,7 @@ celery -A app.services.tasks.celery_app worker --loglevel=info
 - **Error Handling** - Graceful fallback for API failures
 - **Synchronous Processing** - Fast, real-time user experience
 
-## 🧪 API Usage Examples
+##  API Usage Examples
 
 ### 1. User Registration
 
@@ -341,7 +341,7 @@ curl -X GET "http://localhost:8000/rooms/456e7890-e89b-12d3-a456-426614174001" \
 }
 ```
 
-## 📊 Database Schema
+##  Database Schema
 
 ### Users Table
 ```sql
@@ -372,7 +372,7 @@ curl -X GET "http://localhost:8000/rooms/456e7890-e89b-12d3-a456-426614174001" \
 - created_at (DateTime)
 ```
 
-## 📊 Real-World Test Results
+##  Real-World Test Results
 
 Based on your test output, here's what happens when you send a message:
 
@@ -414,7 +414,7 @@ Based on your test output, here's what happens when you send a message:
 }
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 
@@ -439,7 +439,7 @@ DATABASE_URL=sqlite:///./chat.db
 DATABASE_URL=postgresql://user:password@localhost:5432/chatdb
 ```
 
-## 🚦 Testing
+##  Testing
 
 ### Health Check
 ```bash
@@ -453,7 +453,7 @@ curl http://localhost:8000/health
 4. Get instant AI response in the same API call
 5. Optionally fetch the room messages to see full conversation history
 
-## 🔒 Security Features
+##  Security Features
 
 - **JWT Authentication** - Secure token-based auth
 - **Password Hashing** - BCrypt password encryption
@@ -461,7 +461,7 @@ curl http://localhost:8000/health
 - **Input Validation** - Pydantic model validation
 - **SQL Injection Protection** - SQLAlchemy ORM protection
 
-## 📈 Scalability
+##  Scalability
 
 - **Async Processing** - Celery for background tasks
 - **Database Agnostic** - SQLAlchemy supports multiple databases
@@ -469,7 +469,7 @@ curl http://localhost:8000/health
 - **Caching Ready** - Redis integration for future caching
 - **Load Balancer Friendly** - No server-side sessions
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -505,7 +505,7 @@ export DEBUG=true
 uvicorn app.main:app --reload --log-level debug
 ```
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -513,11 +513,11 @@ uvicorn app.main:app --reload --log-level debug
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **FastAPI** - Modern, fast web framework
 - **Google Gemini** - AI integration
@@ -527,6 +527,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Support
+##  Support
 
 For support, email tanmoydn2003@example.com or create an issue in the repository.
