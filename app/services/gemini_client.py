@@ -2,6 +2,7 @@ import logging
 import httpx
 from typing import List, Dict, Optional
 from app.core.config import settings
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -12,11 +13,17 @@ class GeminiClient:
         if not settings.GEMINI_API_KEY:
             raise RuntimeError("GEMINI_API_KEY environment variable is not set")
         self.api_url = f"{GEMINI_API_URL}?key={settings.GEMINI_API_KEY}"
-    
-    async def generate_response(self, message: str, conversation_history: Optional[List[Dict]] = None) -> str:
 
+    async def generate_response(
+        self,
+        message: str,
+        conversation_history: Optional[List[Dict]] = None
+    ) -> str:
+        """
+        Sends a prompt to Gemini and returns the AI's text response.
+        """
         try:
-            # Prepare context with last 5 messages if present
+            # Build prompt with optional history
             if conversation_history:
                 context = "Previous conversation:\n"
                 for msg in conversation_history[-5:]:
@@ -27,32 +34,42 @@ class GeminiClient:
                 context = f"User: {message}\nAI:"
 
             payload = {
-                "contents": [
-                    {"parts": [{"text": context}]}
-                ],
+                "prompt": {
+                    "text": context
+                },
                 "temperature": 0.2,
                 "maxOutputTokens": 512
             }
 
+            logger.debug(f"Sending request to Gemini API: {json.dumps(payload)}")
+
             async with httpx.AsyncClient(timeout=30.0) as client:
-                resp = await client.post(self.api_url, json=payload, headers={"Content-Type": "application/json"})
+                resp = await client.post(
+                    self.api_url,
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                )
                 resp.raise_for_status()
                 data = resp.json()
 
-            # Parse response - same logic as in chat.py
+            logger.debug(f"Received Gemini API response: {json.dumps(data)}")
+
+            # Extract content
             for list_key in ("candidates", "outputs", "output"):
                 lst = data.get(list_key)
                 if isinstance(lst, list) and lst:
                     first = lst[0]
                     if isinstance(first, dict):
-                        return first.get("content") or first.get("text") or first.get("output") or str(first)
-                    return str(first)
+                        content = first.get("content") or first.get("text") or first.get("output")
+                        if content:
+                            return content
+                    else:
+                        return str(first)
 
             for key in ("content", "generated_text", "response", "text"):
                 if key in data:
                     return data[key]
 
-            # Nested search fallback
             def find_first_string(v):
                 if isinstance(v, str):
                     return v
@@ -74,10 +91,12 @@ class GeminiClient:
 
             return "Sorry, I could not generate a reply."
 
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Gemini API HTTP error {e.response.status_code}: {e.response.text}")
+            return "Sorry, the AI service returned an error."
         except Exception as e:
-            logger.error(f"Gemini API error: {e}")
+            logger.error(f"Unexpected error during Gemini API call: {e}")
             return "I'm experiencing technical difficulties. Please try again later."
 
-
-# Global instance
+# Single shared instance
 gemini_client = GeminiClient()
