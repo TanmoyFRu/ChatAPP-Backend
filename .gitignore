@@ -1,0 +1,98 @@
+.env
+route_fetch.sh
+test_db.py
+test.sh
+alembic.ini
+ai_model.py
+chatapp-env
+migrations
+chat.db
+_pycache_
+D:\ChatApp-Backend\app\__pycache__
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# VS Code
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Database files
+*.sqlite3
+*chat.db
+chat.db
+
+# Environment variables
+.env
+
+# Celery
+celerybeat-schedule
+
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Other
+*.pem
