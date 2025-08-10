@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
     
     # Gemini API
-    GEMINI_API_KEY: str = "AIzaSyAI5lz61HZDZNM0f2Se3ovfTaJTh_TeXTo"
+    GEMINI_API_KEY: str 
     
     # Redis/Celery
     REDIS_URL: str = "redis://localhost:6379/0"
