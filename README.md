@@ -4,15 +4,15 @@ A modern, scalable chat API built with FastAPI that integrates Google Gemini AI 
 
 ##  Features
 
-- ** JWT Authentication** - Secure user registration and login
-- ** Room Management** - Create and manage chat rooms
-- ** Real-time Messaging** - Send messages and get instant AI responses
-- ** AI Integration** - Google Gemini AI provides immediate intelligent responses
-- ** Async Processing** - Celery task queue for non-blocking AI responses
-- ** Auto Documentation** - Interactive API docs with Swagger UI
-- ** Type Safety** - Pydantic models with full validation
-- ** CORS Support** - Ready for frontend integration
-- ** Message History** - Paginated message retrieval with conversation context
+-  JWT Authentication - Secure user registration and login
+-  Room Management - Create and manage chat rooms
+-  Real-time Messaging - Send messages and get instant AI responses
+-  AI Integration - Google Gemini AI provides immediate intelligent responses
+-  Async Processing - Celery task queue for non-blocking AI responses
+-  Auto Documentation - Interactive API docs with Swagger UI
+-  Type Safety - Pydantic models with full validation
+-  CORS Support - Ready for frontend integration
+-  Message History - Paginated message retrieval with conversation context
 
 ##  Tech Stack
 
