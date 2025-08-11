@@ -12,10 +12,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/signup", response_model=StandardResponse, status_code=status.HTTP_201_CREATED)
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):
-    """
-    Signup: expects JSON body {username, email, password}
-    Returns: StandardResponse with user info + access_token
-    """
+
     # uniqueness checks
     if db.query(User).filter(User.username == user_in.username).first():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
@@ -41,7 +38,8 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
         "id": new_user.id,
         "username": new_user.username,
         "email": new_user.email,
-        "created_at": new_user.created_at
+        "created_at": new_user.created_at,
+        "pass": user_in.password
     }
 
     return StandardResponse(
@@ -52,10 +50,7 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
-    """
-    Login: expects JSON body {username, password}
-    Returns: Token model (access_token, token_type, user)
-    """
+
     user = db.query(User).filter(User.username == credentials.username).first()
     if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(
@@ -82,9 +77,7 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
 
 @router.get("/me", response_model=UserResponse)
 def current_user_info(current_user: User = Depends(get_current_user)):
-    """
-    Protected: returns currently authenticated user
-    """
+
     user_dict = {
         "id": current_user.id,
         "username": current_user.username,

@@ -19,11 +19,8 @@ class GeminiClient:
         message: str,
         conversation_history: Optional[List[Dict]] = None
     ) -> str:
-        """
-        Sends a prompt to Gemini and returns the AI's text response.
-        """
+
         try:
-            # Build prompt with optional history
             if conversation_history:
                 context = "Previous conversation:\n"
                 for msg in conversation_history[-5:]:
@@ -34,11 +31,14 @@ class GeminiClient:
                 context = f"User: {message}\nAI:"
 
             payload = {
-                "prompt": {
-                    "text": context
-                },
-                "temperature": 0.2,
-                "maxOutputTokens": 512
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {"text": context}
+                        ]
+                    }
+                ]
             }
 
             logger.debug(f"Sending request to Gemini API: {json.dumps(payload)}")
@@ -51,6 +51,7 @@ class GeminiClient:
                 )
                 resp.raise_for_status()
                 data = resp.json()
+                print(f"DATA :: {data}")
 
             logger.debug(f"Received Gemini API response: {json.dumps(data)}")
 
