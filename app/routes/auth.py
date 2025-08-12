@@ -6,39 +6,41 @@ from app.models import User
 from app.schemas import UserCreate, UserLogin, UserResponse, Token, StandardResponse
 from app.core.security import create_access_token, get_password_hash, verify_password
 from app.auth import get_current_user
-
+from app.redis_model import User
+from redis_om.model.model import NotFoundError
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/signup", response_model=StandardResponse, status_code=status.HTTP_201_CREATED)
-def signup(user_in: UserCreate, db: Session = Depends(get_db)):
+def signup(user_in: UserCreate):
+    try:
+        if User.find(User.username == user_in.username).first():
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
+    except NotFoundError:
+        pass  # username not found — good to go
 
-    # uniqueness checks
-    if db.query(User).filter(User.username == user_in.username).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
+    try:
+        if User.find(User.email == user_in.email).first():
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
+    except NotFoundError:
+        pass  # email not found — good to go
 
-    if db.query(User).filter(User.email == user_in.email).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
-
+    # proceed as normal
     hashed_pw = get_password_hash(user_in.password)
-
     new_user = User(
         username=user_in.username,
         email=user_in.email,
         password_hash=hashed_pw
     )
+    new_user.save()
 
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    token = create_access_token({"sub": str(new_user.id)})
+    token = create_access_token({"sub": new_user.id})
 
     user_dict = {
         "id": new_user.id,
         "username": new_user.username,
         "email": new_user.email,
-        "created_at": new_user.created_at,
+        "created_at": new_user.created_at.isoformat(),
         "pass": user_in.password
     }
 
@@ -47,11 +49,9 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
         data={"user": user_dict, "access_token": token}
     )
 
-
 @router.post("/login", response_model=Token)
-def login(credentials: UserLogin, db: Session = Depends(get_db)):
-
-    user = db.query(User).filter(User.username == credentials.username).first()
+def login(credentials: UserLogin):
+    user = User.find(User.username == credentials.username).first()
     if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -59,13 +59,13 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token = create_access_token({"sub": str(user.id)})
+    access_token = create_access_token({"sub": user.id})
 
     user_dict = {
         "id": user.id,
         "username": user.username,
         "email": user.email,
-        "created_at": user.created_at
+        "created_at": user.created_at.isoformat()
     }
 
     return Token(
